@@ -11,7 +11,7 @@ namespace Chip8Emulator.Tests
         public void LoadFileIntoMemory_LoadsFileIntoMemory()
         {
             // Arrange
-            const string TestFilePath = "c:\abc.dat";
+            const string TestFilePath = "c:\\abc.dat";
             var testBytes = new byte[] { 0x0 };
 
             var mockMemory = new Mock<IMemory>();
@@ -34,7 +34,7 @@ namespace Chip8Emulator.Tests
         public void LoadFileIntoMemory_ReturnsFileLength()
         {
             // Arrange
-            const string TestFilePath = "c:\abc.dat";
+            const string TestFilePath = "c:\\abc.dat";
             var testBytes = new byte[] { 0x0, 0x0, 0x0, 0x0, 0x0 };
 
             var mockMemory = new Mock<IMemory>();

@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator
 {
-    public class EmulatorShell : IEmulatorShell
+    internal class EmulatorShell : IEmulatorShell
     {
         private readonly IDisassembler _disassembler;
 

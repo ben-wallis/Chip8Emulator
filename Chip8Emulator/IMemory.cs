@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator
 {
-    public interface IMemory
+    internal interface IMemory
     {
         void SetValue(ushort address, byte value);
         byte GetValue(ushort address);

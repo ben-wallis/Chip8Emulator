@@ -56,6 +56,7 @@
     <Compile Include="TestCpu.cs" />
     <Compile Include="TestFileHandler.cs" />
     <Compile Include="TestMemory.cs" />
+    <Compile Include="TestRegisterBank.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

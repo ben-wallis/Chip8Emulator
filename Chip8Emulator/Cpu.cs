@@ -2,34 +2,27 @@
 
 namespace Chip8Emulator
 {
-    public class Cpu
+    internal class Cpu
     {
         private readonly IMemory _memory;
+        private readonly IRegisterBank _registerBank;
 
-        public ushort SP { get; private set; }
-        public ushort PC { get; private set; }
-        public ushort I { get; private set; }
-        public byte[] V { get; private set; }
-        public byte Delay { get; private set; }
-        public byte Sound { get; private set; }
-        
-        public Cpu(IMemory memory)
+        public Cpu(IMemory memory, IRegisterBank registerBank)
         {
             _memory = memory;
-            Initialise();
+            _registerBank = registerBank;
+            InitialiseRegisters();
         }
 
-        private void Initialise()
+        private void InitialiseRegisters()
         {
-            V = new byte[16]; // Initialise Registers
-            PC = 0x200;
-            SP = 0xfa0;
+        
         }
 
         public void EmulateOp()
         {
-            var byte1Address = PC;
-            var byte2Address = (ushort)(PC + 1);
+            var byte1Address = _registerBank.PC;
+            var byte2Address = (ushort)(_registerBank.PC + 1);
 
             var opCode = new[] { _memory.GetValue(byte1Address), _memory.GetValue(byte2Address) };
 
@@ -42,14 +35,20 @@ namespace Chip8Emulator
                 case 0x01: // 1NNN Jumps to address NNN
                 {
                     var target = (ushort) (opCode[0] & 0x0f | opCode[1]);
-                    PC = target;
+                    _registerBank.PC = target;
                     break;
                 }
                 case 0x02: // 2NNN Calls subroutine at NNN
                     throw new NotImplementedException("Unimplemented instruction");
                 case 0x03: // 3XNN Skips the next instruction if VX equals NN
                 {
-                    throw new NotImplementedException("Unimplemented instruction");
+                    var reg = (ushort) (opCode[0] & 0x0f);
+                    if (_registerBank.V[reg] == opCode[1])
+                    {
+                        _registerBank.PC += 2;
+                    }
+
+                    _registerBank.PC += 2;
                 }
                     break;
                 case 0x04: // 4XNN Skips the next instruction if VX doesn't equal NN

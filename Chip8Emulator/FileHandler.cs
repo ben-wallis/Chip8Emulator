@@ -2,7 +2,7 @@
 
 namespace Chip8Emulator
 {
-    public class FileHandler : IFileHandler
+    internal class FileHandler : IFileHandler
     {
         private readonly IMemory _memory;
         private readonly IFileSystemService _fileSystemService;

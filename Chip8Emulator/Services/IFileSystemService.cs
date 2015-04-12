@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator.Services
 {
-    public interface IFileSystemService
+    internal interface IFileSystemService
     {
         byte[] ReadFileAsByteArray(string filePath);
     }

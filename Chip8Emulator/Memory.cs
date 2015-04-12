@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator
 {
-    public class Memory : IMemory
+    internal class Memory : IMemory
     {
         private const ushort MemorySize = 4096;
         private const ushort ProgramStart = 0x200;

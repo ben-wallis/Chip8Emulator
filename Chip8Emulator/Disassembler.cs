@@ -2,7 +2,7 @@
 
 namespace Chip8Emulator
 {
-    public class Disassembler : IDisassembler
+    internal class Disassembler : IDisassembler
     {
         private readonly IMemory _memory;
         private readonly IFileHandler _fileHandler;
