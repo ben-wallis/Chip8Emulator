@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Runtime.CompilerServices;
+using Moq;
 using NUnit.Framework;
 
 namespace Chip8Emulator.Tests
@@ -24,11 +25,11 @@ namespace Chip8Emulator.Tests
             _testUtility.TestCpu.EmulateOp();
 
             // Assert
-            Assert.AreEqual(0x0a2, _testUtility.MockRegisterBank.Object.PC);
+            Assert.AreEqual(0x2a0, _testUtility.MockRegisterBank.Object.PC);
         }
 
         [Test]
-        public void EmulateOp_3XNN_VXEqualToNN_AdvancesProgramCounterBy4()
+        public void EmulateOp_3XNN_VXEqualToNN_SkipsNextInstruction()
         {
             // Arrange
             const byte TestRegister = 0x01;
@@ -45,7 +46,7 @@ namespace Chip8Emulator.Tests
         }
 
         [Test]
-        public void EmulateOp_3XNN_VXNotEqualToNN_AdvancesProgramCounterBy2()
+        public void EmulateOp_3XNN_VXNotEqualToNN_MovesToNextInstruction()
         {
             // Arrange
             const byte TestRegister = 0x01;
@@ -58,6 +59,258 @@ namespace Chip8Emulator.Tests
             _testUtility.TestCpu.EmulateOp();
 
             // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_4XNN_VXNotEqualToNN_SkipsNextInstruction()
+        {
+            // Arrange
+            const byte TestRegister = 0x01;
+            const byte TestValue = 0x12;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x410a);
+            _testUtility.MockRegisterBank.Object.V[TestRegister] = TestValue;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 4, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_4XNN_VXEqualToNN_MovesToNextInstruction()
+        {
+            // Arrange
+            const byte TestRegister = 0x01;
+            const byte TestValue = 0x12;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x4112);
+            _testUtility.MockRegisterBank.Object.V[TestRegister] = TestValue;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_5XY0_VXEqualToVY_SkipsNextInstruction()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0x12;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x12;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x51b0);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 4, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_5XY0_VXNotEqualToVY_SkipsNextInstruction()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0x12;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x51b0);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_6XNN_SetsVXToNN()
+        {
+            // Arrange
+            const byte TestRegister = 0x0a;
+            const byte TestValue = 0x02;
+            
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x6a02);
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(_testUtility.MockRegisterBank.Object.V[TestRegister], TestValue);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_7XNN_AddsNNToVX()
+        {
+            // Arrange
+            const byte TestRegister = 0x0a;
+            const byte TestValue = 0x03;
+            const byte TestRegisterStartValue = 0xf;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x7a03);
+            _testUtility.MockRegisterBank.Object.V[TestRegister] = TestRegisterStartValue;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(_testUtility.MockRegisterBank.Object.V[TestRegister], TestRegisterStartValue + TestValue);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_8XY0_SetsVXtoVY()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0x12;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x81b0);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(_testUtility.MockRegisterBank.Object.V[TestRegisterY], _testUtility.MockRegisterBank.Object.V[TestRegisterX]);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_8XY1_SetsVXtoVXORVY()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0xf0;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x0b;
+            const byte ExpectedValueX = 0xfb;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x81b1);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(ExpectedValueX, _testUtility.MockRegisterBank.Object.V[TestRegisterX]);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_8XY2_SetsVXtoVXANDVY()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0xeb;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x56;
+            const byte ExpectedValueX = 0x42;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x81b2);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(ExpectedValueX, _testUtility.MockRegisterBank.Object.V[TestRegisterX]);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_8XY3_SetsVXtoVXXORVY()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0x38;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0xb5;
+            const byte ExpectedValueX = 0x8d;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x81b3);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(ExpectedValueX, _testUtility.MockRegisterBank.Object.V[TestRegisterX]);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_9XY0_VXNotEqualToVY_SkipsNextInstruction()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0x12;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x91b0);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 4, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_9XY0_VXEqualToVY_MovesToNextInstruction()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestValueX = 0x12;
+            const byte TestRegisterY = 0x0b;
+            const byte TestValueY = 0x12;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0x91b0);
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestValueX;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestValueY;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_ANNN_SetsIToNNN()
+        {
+            // Arrange
+            const ushort TestAddress = 0xabc;
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0xaabc);
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+            
+            // Assert
+            Assert.AreEqual(TestAddress, _testUtility.MockRegisterBank.Object.I);
             Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
         }
 
