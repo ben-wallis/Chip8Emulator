@@ -23,7 +23,6 @@ namespace Chip8Emulator
                 DisassembleChip8OpCode(programCounter);
                 programCounter += 2;
             }
-
         }
 
         private void DisassembleChip8OpCode(ushort startAddress)

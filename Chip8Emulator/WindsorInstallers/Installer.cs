@@ -42,6 +42,13 @@ namespace Chip8Emulator.WindsorInstallers
                     .ImplementedBy<RegisterBank>()
                     .LifestyleSingleton()
                 );
+
+            container.Register(
+                Component
+                    .For<IDisplay>()
+                    .ImplementedBy<Display>()
+                    .LifestyleSingleton()
+                );
         }
     }
 }

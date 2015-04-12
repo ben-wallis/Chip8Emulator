@@ -50,9 +50,11 @@
   <ItemGroup>
     <Compile Include="Cpu.cs" />
     <Compile Include="Disassembler.cs" />
+    <Compile Include="Display.cs" />
     <Compile Include="EmulatorShell.cs" />
     <Compile Include="FileHandler.cs" />
     <Compile Include="IDisassembler.cs" />
+    <Compile Include="IDisplay.cs" />
     <Compile Include="IEmulatorShell.cs" />
     <Compile Include="IFileHandler.cs" />
     <Compile Include="IMemory.cs" />
@@ -63,6 +65,8 @@
     <Compile Include="RegisterBank.cs" />
     <Compile Include="Services\FileSystemService.cs" />
     <Compile Include="Services\IFileSystemService.cs" />
+    <Compile Include="Services\IRandomService.cs" />
+    <Compile Include="Services\RandomService.cs" />
     <Compile Include="WindsorInstallers\Installer.cs" />
     <Compile Include="WindsorInstallers\ServicesInstaller.cs" />
   </ItemGroup>

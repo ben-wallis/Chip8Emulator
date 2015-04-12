@@ -15,6 +15,13 @@ namespace Chip8Emulator.WindsorInstallers
                     .ImplementedBy<FileSystemService>()
                     .LifestyleSingleton()
                 );
+
+            container.Register(
+                Component
+                    .For<IRandomService>()
+                    .ImplementedBy<RandomService>()
+                    .LifestyleSingleton()
+                );
         }
     }
 }
