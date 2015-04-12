@@ -1,0 +1,55 @@
+﻿using Chip8Emulator.Services;
+using NUnit.Framework;
+using Moq;
+
+namespace Chip8Emulator.Tests
+{
+    [TestFixture]
+    public class TestFileHandler
+    {
+        [Test]
+        public void LoadFileIntoMemory_LoadsFileIntoMemory()
+        {
+            // Arrange
+            const string TestFilePath = "c:\abc.dat";
+            var testBytes = new byte[] { 0x0 };
+
+            var mockMemory = new Mock<IMemory>();
+            mockMemory.Setup(m => m.LoadProgram(testBytes)).Verifiable();
+
+            var mockFileSystemService = new Mock<IFileSystemService>();
+            mockFileSystemService.Setup(f => f.ReadFileAsByteArray(TestFilePath)).Returns(testBytes).Verifiable();
+            
+            var fileHandler = new FileHandler(mockMemory.Object, mockFileSystemService.Object);
+            
+            // Act
+            fileHandler.LoadFileIntoMemory(TestFilePath);
+
+            // Assert
+            mockMemory.Verify();
+            mockFileSystemService.Verify();
+        }
+
+        [Test]
+        public void LoadFileIntoMemory_ReturnsFileLength()
+        {
+            // Arrange
+            const string TestFilePath = "c:\abc.dat";
+            var testBytes = new byte[] { 0x0, 0x0, 0x0, 0x0, 0x0 };
+
+            var mockMemory = new Mock<IMemory>();
+            mockMemory.Setup(m => m.LoadProgram(testBytes)).Verifiable();
+
+            var mockFileSystemService = new Mock<IFileSystemService>();
+            mockFileSystemService.Setup(f => f.ReadFileAsByteArray(TestFilePath)).Returns(testBytes).Verifiable();
+
+            var fileHandler = new FileHandler(mockMemory.Object, mockFileSystemService.Object);
+
+            // Act
+            var result = fileHandler.LoadFileIntoMemory(TestFilePath);
+
+            // Assert
+            Assert.AreEqual(5, result);
+        }
+    }
+}
