@@ -1,8 +1,8 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Chip8Emulator.Tests
 {
+    // TODO: Tidy up tests, add test utility to remove the need to new up Display in every test
     [TestFixture]
     public class TestDisplay
     {
@@ -20,7 +20,7 @@ namespace Chip8Emulator.Tests
         }
 
         [Test]
-        public void SetPixelValue_SetsPixelToValue()
+        public void FlipPixel_SetsPixelToTrueIfAlreadyFalse()
         {
             // Arrange
             const byte TestX = 40;
@@ -29,10 +29,51 @@ namespace Chip8Emulator.Tests
             var display = new Display();
 
             // Act
-            display.SetPixel(TestX, TestY, true);
+            display.FlipPixel(TestX, TestY);
 
             // Assert
             Assert.AreEqual(true, display.Pixels[TestX, TestY]);
+        }
+
+        [Test]
+        public void FlipPixel_SetsPixelToFalseIfAlreadyTrue()
+        {
+            // Arrange
+            var display = new Display();
+            display.FlipPixel(10, 10);
+
+            // Act
+            display.FlipPixel(10, 10);
+
+            // Assert
+            Assert.AreEqual(false, display.Pixels[10, 10]);
+        }
+
+        [Test]
+        public void FlipPixel_ReturnsTrueIfBitFlippedToFalseFromTrue()
+        {
+            // Arrange
+            var display = new Display();
+            display.FlipPixel(10, 10);
+
+            // Act
+            var result = display.FlipPixel(10, 10);
+
+            // Assert
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void FlipPixel_ReturnsFalseIfBitNotFlippedToFalseFromTrue()
+        {
+            // Arrange
+            var display = new Display();
+
+            // Act
+            var result = display.FlipPixel(10, 10);
+
+            // Assert
+            Assert.AreEqual(false, result);
         }
 
         [Test]
@@ -40,8 +81,8 @@ namespace Chip8Emulator.Tests
         {
             // Arrange
             var display = new Display();
-            display.SetPixel(10, 10, true);
-            display.SetPixel(63, 31, true);
+            display.FlipPixel(10, 10);
+            display.FlipPixel(63, 31);
 
             // Act
             display.Initialise();

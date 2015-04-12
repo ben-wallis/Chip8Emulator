@@ -4,6 +4,8 @@
     {
         bool[,] Pixels { get; }
         void Initialise();
-        void SetPixel(byte x, byte y, bool value);
+        ushort Height { get; }
+        ushort Width { get; }
+        bool FlipPixel(byte x, byte y);
     }
 }

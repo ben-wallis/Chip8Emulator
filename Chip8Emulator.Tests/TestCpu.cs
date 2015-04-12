@@ -646,6 +646,156 @@ namespace Chip8Emulator.Tests
         }
 
         [Test]
+        public void EmulateOp_DXYN_NoWrap_NoSetPixelsUnset_SetsCorrectDisplayPixels()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestRegisterXValue = 0x01;
+            const byte TestRegisterY = 0x02;
+            const byte TestRegisterYValue = 0x02;
+            const byte TestIValue = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0xd125);
+            _testUtility.MockRegisterBank.Object.I = TestIValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestRegisterXValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestRegisterYValue;
+
+            // Set the Memory mock to return the data for a "0" character
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x00)).Returns(0xf0).Verifiable(); // b11110000
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x01)).Returns(0x90).Verifiable(); // b10010000
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x02)).Returns(0x90).Verifiable(); // b10010000
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x03)).Returns(0x90).Verifiable(); // b10010000
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x04)).Returns(0xf0).Verifiable(); // b11110000
+
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x02, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x03, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x03)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x03)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x04)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x04)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x05)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x05)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x06)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x02, 0x06)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x03, 0x06)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x06)).Returns(false).Verifiable();
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            _testUtility.MockMemory.VerifyAll();
+            _testUtility.MockDisplay.VerifyAll();
+            
+            Assert.AreEqual(0x00, _testUtility.MockRegisterBank.Object.V[0x0f]);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_DXYN_NoWrap_SetPixelsUnset_SetsVFTo1()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestRegisterXValue = 0x01;
+            const byte TestRegisterY = 0x02;
+            const byte TestRegisterYValue = 0x02;
+            const byte TestIValue = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0xd121);
+            _testUtility.MockRegisterBank.Object.I = TestIValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestRegisterXValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestRegisterYValue;
+
+            // Set the Memory mock to return the data for the first line of a "0" character
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x00)).Returns(0xf0).Verifiable(); // b11110000
+
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x02, 0x02)).Returns(true).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x03, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x02)).Returns(false).Verifiable();
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            _testUtility.MockMemory.VerifyAll();
+            _testUtility.MockDisplay.VerifyAll();
+            Assert.AreEqual(0x01, _testUtility.MockRegisterBank.Object.V[0x0f]);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_DXYN_WrapX_NoSetPixelsUnset_DoesntCallFlipPixelForOverflowedPixels()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestRegisterXValue = 0x3c; // 60 (4 pixels will overflow the right side of the 64x32 display)
+            const byte TestRegisterY = 0x02;
+            const byte TestRegisterYValue = 0x02;
+            const byte TestIValue = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0xd121);
+            _testUtility.MockRegisterBank.Object.I = TestIValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestRegisterXValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestRegisterYValue;
+
+            // Set the Memory mock to return a full line of 1s
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x00)).Returns(0xff).Verifiable(); // b11111111
+
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x3c, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x3d, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x3e, 0x02)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x3f, 0x02)).Returns(false).Verifiable();
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            _testUtility.MockMemory.VerifyAll();
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x40, 0x02), Times.Never);
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x41, 0x02), Times.Never);
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x42, 0x02), Times.Never);
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x43, 0x02), Times.Never);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
+        public void EmulateOp_DXYN_WrapY_NoSetPixelsUnset_DoesntCallFlipPixelForOverflowedPixels()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestRegisterXValue = 0x01;
+            const byte TestRegisterY = 0x02;
+            const byte TestRegisterYValue = 0x1f; // 31 (the second row will overflow the bottom of the 64x32 display)
+            const byte TestIValue = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0xd122);
+            _testUtility.MockRegisterBank.Object.I = TestIValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestRegisterXValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestRegisterYValue;
+
+            _testUtility.MockMemory.Setup(m => m.GetValue(0x00)).Returns(0xf0).Verifiable(); // b11110000
+
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x01, 0x1f)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x02, 0x1f)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x03, 0x1f)).Returns(false).Verifiable();
+            _testUtility.MockDisplay.Setup(d => d.FlipPixel(0x04, 0x1f)).Returns(false).Verifiable();
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            _testUtility.MockMemory.VerifyAll();
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x01, 0x20), Times.Never);
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x02, 0x20), Times.Never);
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x03, 0x20), Times.Never);
+            _testUtility.MockDisplay.Verify(d => d.FlipPixel(0x04, 0x20), Times.Never);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
         public void EmulateOp_EX9E_KeyStoredInVXPressed_SkipsNextInstruction()
         {
             // Arrange
@@ -1037,6 +1187,8 @@ namespace Chip8Emulator.Tests
                 MockRandomService = new Mock<IRandomService>();
                 MockDisplay = new Mock<IDisplay>();
 
+                MockDisplay.SetupGet(d => d.Width).Returns(64);
+                MockDisplay.SetupGet(d => d.Height).Returns(32);
                 // Class under test instantiation
                 TestCpu = new Cpu(MockMemory.Object, MockRegisterBank.Object, MockRandomService.Object,
                     MockDisplay.Object);

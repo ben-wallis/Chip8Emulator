@@ -247,7 +247,37 @@ namespace Chip8Emulator
                 case 0x0d: // DXYN Sprites stored in memory at location in index register (I), maximum 8bits wide.
                            // Wraps around the screen. If when drawn, clears a pixel, register VF is set to 1 otherwise
                            // it is zero. All drawing is XOR drawing (i.e. it toggles the screen pixels)
-                    throw new NotImplementedException(String.Format("Unimplemented instruction {0:x2}{1:x2}", opCode[0], opCode[1]));
+                {
+                    var regX = (byte)(opCode[0] & 0x0f);
+                    var regY = (byte)(opCode[1] >> 4);
+                    var spriteHeight = (byte)(opCode[1] & 0x0f);
+                    var coordX = _registerBank.V[regX];
+                    var coordY = _registerBank.V[regY];
+                    var displayWidth = _display.Width;
+                    var displayHeight = _display.Height;
+
+                    // TODO: Refactor this mess.
+                    var memPos = 0;
+                    for (var y = coordY; y < coordY + spriteHeight && y < displayHeight; y++)
+                    {
+                        var line = _memory.GetValue((ushort) (_registerBank.I + memPos++));
+                        for (var x = 0; x < 8; x++)
+                        {
+                            if (coordX + (7 - x) > (displayWidth - 1)) continue;
+
+                            var result = (line >> x) & 0x1;
+                            if (result != 0x01) continue;
+
+                            if (_display.FlipPixel((byte) (coordX + (7 - x)), y))
+                            {
+                                _registerBank.V[0x0f] = 0x01;
+                            }
+                        }
+                    }
+
+                    _registerBank.PC += 2;
+                    break;
+                }
                 case 0x0e:
                 {
                     var regX = (byte)(opCode[0] & 0x0f);

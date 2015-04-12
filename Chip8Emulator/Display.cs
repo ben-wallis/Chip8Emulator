@@ -2,12 +2,7 @@
 {
     internal class Display : IDisplay
     {
-        private bool[,] _displayPixels;
-
-        public bool[,] Pixels
-        {
-            get { return _displayPixels; }
-        }
+        public bool[,] Pixels { get; private set; }
 
         public Display()
         {
@@ -16,12 +11,26 @@
 
         public void Initialise()
         {
-            _displayPixels = new bool[64, 32];
+            Pixels = new bool[64, 32];
         }
 
-        public void SetPixel(byte x, byte y, bool value)
+        public ushort Height
         {
-            _displayPixels[x, y] = value;
+            get { return 32; }
+        }
+
+        public ushort Width
+        {
+            get { return 64; }
+        }
+
+        public bool FlipPixel(byte x, byte y)
+        {
+            var existingValue = Pixels[x, y];
+
+            Pixels[x, y] ^= true;
+
+            return existingValue;
         }
     }
 }
