@@ -17,6 +17,13 @@ namespace Chip8Emulator.WindsorInstallers
 
             container.Register(
                 Component
+                    .For<ICpu>()
+                    .ImplementedBy<Cpu>()
+                    .LifestyleSingleton()
+                );
+
+            container.Register(
+                Component
                     .For<IMemory>()
                     .ImplementedBy<Memory>()
                     .LifestyleSingleton()

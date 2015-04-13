@@ -646,6 +646,29 @@ namespace Chip8Emulator.Tests
         }
 
         [Test]
+        public void EmulateOp_DXYN_SetsDrawRequiredTrue()
+        {
+            // Arrange
+            const byte TestRegisterX = 0x01;
+            const byte TestRegisterXValue = 0x01;
+            const byte TestRegisterY = 0x02;
+            const byte TestRegisterYValue = 0x02;
+            const byte TestIValue = 0x00;
+
+            _testUtility.SetOpCodeAtInitialMemoryAddress(0xd121);
+            _testUtility.MockRegisterBank.Object.I = TestIValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterX] = TestRegisterXValue;
+            _testUtility.MockRegisterBank.Object.V[TestRegisterY] = TestRegisterYValue;
+
+            // Act
+            _testUtility.TestCpu.EmulateOp();
+
+            // Assert
+            Assert.AreEqual(true, _testUtility.TestCpu.DrawRequired);
+            Assert.AreEqual(CpuTestUtility.InitialProgramCounter + 2, _testUtility.MockRegisterBank.Object.PC);
+        }
+
+        [Test]
         public void EmulateOp_DXYN_NoWrap_NoSetPixelsUnset_SetsCorrectDisplayPixels()
         {
             // Arrange

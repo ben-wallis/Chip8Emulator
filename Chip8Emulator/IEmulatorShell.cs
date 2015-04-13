@@ -3,5 +3,6 @@
     internal interface IEmulatorShell
     {
         void DisassembleFile();
+        void RunEmulator();
     }
 }

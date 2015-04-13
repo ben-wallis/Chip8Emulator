@@ -53,6 +53,7 @@
     <Compile Include="Display.cs" />
     <Compile Include="EmulatorShell.cs" />
     <Compile Include="FileHandler.cs" />
+    <Compile Include="ICpu.cs" />
     <Compile Include="IDisassembler.cs" />
     <Compile Include="IDisplay.cs" />
     <Compile Include="IEmulatorShell.cs" />

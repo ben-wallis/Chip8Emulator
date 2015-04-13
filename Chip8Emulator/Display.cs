@@ -1,4 +1,6 @@
-﻿namespace Chip8Emulator
+﻿using System;
+
+namespace Chip8Emulator
 {
     internal class Display : IDisplay
     {
@@ -22,6 +24,20 @@
         public ushort Width
         {
             get { return 64; }
+        }
+
+        public void DumpToConsole()
+        {
+            for (var y = 0; y < Height; y++)
+            {
+                var line = "";
+                for (var x = 0; x < Width; x++)
+                {
+                    line = line + (Pixels[x, y] ? "█" : " ");
+                }
+                Console.WriteLine(line);
+                Console.WriteLine();
+            }
         }
 
         public bool FlipPixel(byte x, byte y)

@@ -20,6 +20,18 @@ namespace Chip8Emulator.Tests
         }
 
         [Test]
+        public void DumpToConsole_PrintsDisplayToConsole()
+        {
+            // Arrange
+            var display = new Display();
+
+            // Act
+            display.DumpToConsole();
+
+            // Assert
+        }
+
+        [Test]
         public void FlipPixel_SetsPixelToTrueIfAlreadyFalse()
         {
             // Arrange

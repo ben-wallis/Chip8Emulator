@@ -3,13 +3,14 @@ using Chip8Emulator.Services;
 
 namespace Chip8Emulator
 {
-    internal class Cpu
+    internal class Cpu : ICpu
     {
         private readonly IMemory _memory;
         private readonly IRegisterBank _registerBank;
         private readonly IRandomService _randomService;
         private readonly IDisplay _display;
-
+        private int _operationCount;
+        
         public Cpu(IMemory memory, IRegisterBank registerBank, IRandomService randomService, IDisplay display)
         {
             _memory = memory;
@@ -20,12 +21,19 @@ namespace Chip8Emulator
             _registerBank.Initialise();
         }
 
+        public bool DrawRequired { get; private set; }
+
         public void EmulateOp()
         {
+            DrawRequired = false;
+
             var byte1Address = _registerBank.PC;
             var byte2Address = (ushort)(_registerBank.PC + 1);
 
             var opCode = new[] { _memory.GetValue(byte1Address), _memory.GetValue(byte2Address) };
+
+            //Console.WriteLine("PC: {0:x4} OpCode: {1:x2}{2:x2}", _registerBank.PC, opCode[0], opCode[1]);
+            //Console.WriteLine("Operation Count: {0}", _operationCount++);
 
             var highNib = opCode[0] >> 4;
 
@@ -274,6 +282,8 @@ namespace Chip8Emulator
                             }
                         }
                     }
+
+                    DrawRequired = true;
 
                     _registerBank.PC += 2;
                     break;
