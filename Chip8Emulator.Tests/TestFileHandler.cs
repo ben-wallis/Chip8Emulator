@@ -1,8 +1,9 @@
-﻿using Chip8Emulator.Services;
+﻿using Chip8Emulator.Core.Services;
+using Chip8Emulator.Core.Services;
 using NUnit.Framework;
 using Moq;
 
-namespace Chip8Emulator.Tests
+namespace Chip8Emulator.Core.Core.Tests
 {
     [TestFixture]
     public class TestFileHandler

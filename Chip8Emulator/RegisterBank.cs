@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Chip8Emulator
+namespace Chip8Emulator.Core
 {
     internal class RegisterBank : IRegisterBank
     {

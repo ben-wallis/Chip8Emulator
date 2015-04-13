@@ -1,4 +1,4 @@
-﻿namespace Chip8Emulator
+﻿namespace Chip8Emulator.Core
 {
     internal interface IDisplay
     {

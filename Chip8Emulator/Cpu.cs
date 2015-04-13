@@ -1,7 +1,7 @@
 ﻿using System;
-using Chip8Emulator.Services;
+using Chip8Emulator.Core.Services;
 
-namespace Chip8Emulator
+namespace Chip8Emulator.Core
 {
     internal class Cpu : ICpu
     {

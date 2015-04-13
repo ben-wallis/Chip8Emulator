@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chip8Emulator
+namespace Chip8Emulator.Core
 {
     internal class Display : IDisplay
     {

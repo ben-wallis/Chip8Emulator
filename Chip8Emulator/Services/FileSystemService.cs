@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Chip8Emulator.Services
+namespace Chip8Emulator.Core.Services
 {
     internal class FileSystemService : IFileSystemService
     {

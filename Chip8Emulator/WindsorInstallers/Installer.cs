@@ -2,7 +2,7 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-namespace Chip8Emulator.WindsorInstallers
+namespace Chip8Emulator.Core.WindsorInstallers
 {
     public class Installer : IWindsorInstaller
     {

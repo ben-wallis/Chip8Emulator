@@ -2,7 +2,7 @@
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 
-namespace Chip8Emulator
+namespace Chip8Emulator.Core
 {
     class Program
     {

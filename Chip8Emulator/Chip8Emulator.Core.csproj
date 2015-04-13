@@ -7,8 +7,8 @@
     <ProjectGuid>{52550636-F8E2-4948-9D48-93C9167850D3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chip8Emulator</RootNamespace>
-    <AssemblyName>Chip8Emulator</AssemblyName>
+    <RootNamespace>Chip8Emulator.Core</RootNamespace>
+    <AssemblyName>Chip8Emulator.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

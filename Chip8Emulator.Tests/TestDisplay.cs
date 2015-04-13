@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Chip8Emulator.Tests
+namespace Chip8Emulator.Core.Core.Tests
 {
     // TODO: Tidy up tests, add test utility to remove the need to new up Display in every test
     [TestFixture]

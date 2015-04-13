@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Chip8Emulator.Tests
+namespace Chip8Emulator.Core.Core.Tests
 {
     [TestFixture]
     public class TestRegisterBank

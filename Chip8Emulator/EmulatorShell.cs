@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Chip8Emulator
+namespace Chip8Emulator.Core
 {
     internal class EmulatorShell : IEmulatorShell
     {

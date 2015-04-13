@@ -1,9 +1,9 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Chip8Emulator.Services;
+using Chip8Emulator.Core.Services;
 
-namespace Chip8Emulator.WindsorInstallers
+namespace Chip8Emulator.Core.WindsorInstallers
 {
     public class ServicesInstaller : IWindsorInstaller
     {
