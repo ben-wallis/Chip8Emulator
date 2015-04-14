@@ -16,9 +16,14 @@ namespace Chip8Emulator.Core
 
         public void Initialise()
         {
-            V = new byte[16];
-            PC = 0x200;
             SP = 0xfa0;
+            PC = 0x200;
+            I = 0;
+            V = new byte[16];
+            Key = 0;
+            KeyPressed = false;
+            Delay = 0;
+            Sound = 0;
             Stack = new Stack<ushort>(16);
         }
     }

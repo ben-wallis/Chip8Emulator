@@ -7,8 +7,8 @@
     <ProjectGuid>{59650076-AA30-4C44-8769-06118602315C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chip8Emulator.Tests</RootNamespace>
-    <AssemblyName>Chip8Emulator.Tests</AssemblyName>
+    <RootNamespace>Chip8Emulator.Core.Tests</RootNamespace>
+    <AssemblyName>Chip8Emulator.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -55,6 +55,7 @@
     <Compile Include="Services\TestFileSystemService.cs" />
     <Compile Include="TestCpu.cs" />
     <Compile Include="TestDisplay.cs" />
+    <Compile Include="TestEmulatorShell.cs" />
     <Compile Include="TestFileHandler.cs" />
     <Compile Include="TestMemory.cs" />
     <Compile Include="TestRegisterBank.cs" />

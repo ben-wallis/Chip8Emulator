@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator.Core
 {
-    internal interface IFileHandler
+    public interface IFileHandler
     {
         int LoadFileIntoMemory(string filePath);
     }

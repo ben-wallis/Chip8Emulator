@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator.Core
 {
-    internal interface IEmulatorShell
+    public interface IEmulatorShell
     {
         void DisassembleFile();
         void RunEmulator();

@@ -5,7 +5,7 @@
         private const ushort MemorySize = 4096;
         private const ushort ProgramStart = 0x200;
 
-        private readonly byte[] _memoryBuffer = new byte[MemorySize];
+        private byte[] _memoryBuffer = new byte[MemorySize];
 
         public Memory()
         {
@@ -53,6 +53,11 @@
             {
                 sprites[i].CopyTo(_memoryBuffer, i * 5);
             }
+        }
+
+        public void Reset()
+        {
+            _memoryBuffer = new byte[MemorySize];
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Chip8Emulator.Core.Core.Tests
+namespace Chip8Emulator.Core.Tests
 {
     [TestFixture]
     public class TestMemory
@@ -30,9 +30,10 @@ namespace Chip8Emulator.Core.Core.Tests
             const byte TestByte2 = 0x2;
             const byte TestByte3 = 0x3;
             var testInputProgram = new[] {TestByte1, TestByte2, TestByte3};
+            
+            var memory = new Memory();
 
             // Act
-            var memory = new Memory();
             memory.LoadProgram(testInputProgram);
 
             // Assert
@@ -43,6 +44,23 @@ namespace Chip8Emulator.Core.Core.Tests
             Assert.AreEqual(TestByte1, address1);
             Assert.AreEqual(TestByte2, address2);
             Assert.AreEqual(TestByte3, address3);
+        }
+
+        [Test]
+        public void Reset_ClearsMemory()
+        {
+            // Arrange
+            const byte TestData = 0xff;
+            const ushort TestAddress = 0x200;
+
+            var memory = new Memory();
+            memory.SetValue(TestAddress, TestData);
+
+            // Act
+            memory.Reset();
+
+            // Assert
+            Assert.AreEqual(0x00, memory.GetValue(TestAddress));
         }
     }
 }

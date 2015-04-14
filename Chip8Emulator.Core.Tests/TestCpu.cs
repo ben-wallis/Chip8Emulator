@@ -4,7 +4,7 @@ using Chip8Emulator.Core.Services;
 using Moq;
 using NUnit.Framework;
 
-namespace Chip8Emulator.Tests
+namespace Chip8Emulator.Core.Tests
 {
     [TestFixture]
     public class TestCpu

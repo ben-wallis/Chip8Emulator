@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using Chip8Emulator.Core;
+using NUnit.Framework;
 
-namespace Chip8Emulator.Core.Core.Tests
+namespace Chip8Emulator.Core.Tests
 {
     // TODO: Tidy up tests, add test utility to remove the need to new up Display in every test
     [TestFixture]
@@ -15,8 +16,8 @@ namespace Chip8Emulator.Core.Core.Tests
             var display = new Display();
 
             // Assert
-            Assert.AreEqual(64, display.Pixels.GetLength(0));
-            Assert.AreEqual(32, display.Pixels.GetLength(1));
+            Assert.AreEqual((int) 64, (int) display.Pixels.GetLength(0));
+            Assert.AreEqual((int) 32, (int) display.Pixels.GetLength(1));
         }
 
         [Test]

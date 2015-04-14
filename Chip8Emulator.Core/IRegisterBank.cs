@@ -2,7 +2,7 @@
 
 namespace Chip8Emulator.Core
 {
-    internal interface IRegisterBank
+    public interface IRegisterBank
     {
         ushort SP { get; set; }
         ushort PC { get; set; }

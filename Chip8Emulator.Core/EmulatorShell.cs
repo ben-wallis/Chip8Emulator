@@ -2,12 +2,14 @@
 
 namespace Chip8Emulator.Core
 {
-    internal class EmulatorShell : IEmulatorShell
+    public class EmulatorShell : IEmulatorShell
     {
         private readonly IDisassembler _disassembler;
         private readonly ICpu _cpu;
         private readonly IFileHandler _fileHandler;
         private readonly IDisplay _display;
+
+        internal bool RunEmulation;
 
         public EmulatorShell(IDisassembler disassembler, ICpu cpu, IFileHandler fileHandler, IDisplay display)
         {
@@ -25,7 +27,9 @@ namespace Chip8Emulator.Core
         public void RunEmulator()
         {
             _fileHandler.LoadFileIntoMemory("c:\\chip8\\CAR");
-            while (true)
+
+            RunEmulation = true;
+            while (RunEmulation)
             {
                 _cpu.EmulateOp();
                 if (!_cpu.DrawRequired) continue;
@@ -35,5 +39,9 @@ namespace Chip8Emulator.Core
             }
         }
 
+        public void StopEmulation()
+        {
+            RunEmulation = false;
+        }
     }
 }

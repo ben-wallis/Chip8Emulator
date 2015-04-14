@@ -1,6 +1,6 @@
 ﻿namespace Chip8Emulator.Core
 {
-    internal interface IDisplay
+    public interface IDisplay
     {
         bool[,] Pixels { get; }
         void Initialise();

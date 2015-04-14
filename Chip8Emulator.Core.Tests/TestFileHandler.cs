@@ -3,7 +3,7 @@ using Chip8Emulator.Core.Services;
 using Moq;
 using NUnit.Framework;
 
-namespace Chip8Emulator.Tests
+namespace Chip8Emulator.Core.Tests
 {
     [TestFixture]
     public class TestFileHandler
@@ -50,7 +50,7 @@ namespace Chip8Emulator.Tests
             var result = fileHandler.LoadFileIntoMemory(TestFilePath);
 
             // Assert
-            Assert.AreEqual(5, result);
+            Assert.AreEqual((int) 5, (int) result);
         }
     }
 }

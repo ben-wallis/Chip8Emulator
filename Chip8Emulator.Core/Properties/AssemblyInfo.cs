@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("Chip8Emulator.Tests")]
+[assembly: InternalsVisibleTo("Chip8Emulator.Core.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.Core", "Chip8Emulator.Core\Chip8Emulator.Core.csproj", "{52550636-F8E2-4948-9D48-93C9167850D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.Tests", "Chip8Emulator.Tests\Chip8Emulator.Tests.csproj", "{59650076-AA30-4C44-8769-06118602315C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.Core.Tests", "Chip8Emulator.Core.Tests\Chip8Emulator.Core.Tests.csproj", "{59650076-AA30-4C44-8769-06118602315C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.UI", "Chip8Emulator.UI\Chip8Emulator.UI.csproj", "{FF9A2FA9-3431-4619-8F43-B073F79C01A9}"
 EndProject
