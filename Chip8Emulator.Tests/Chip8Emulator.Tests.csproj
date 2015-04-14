@@ -64,7 +64,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chip8Emulator\Chip8Emulator.Core.csproj">
+    <ProjectReference Include="..\Chip8Emulator.Core\Chip8Emulator.Core.csproj">
       <Project>{52550636-f8e2-4948-9d48-93c9167850d3}</Project>
       <Name>Chip8Emulator.Core</Name>
     </ProjectReference>

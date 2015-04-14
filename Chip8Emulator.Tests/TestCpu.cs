@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Chip8Emulator.Core.Services;
+using Chip8Emulator.Core;
 using Chip8Emulator.Core.Services;
 using Moq;
 using NUnit.Framework;
 
-namespace Chip8Emulator.Core.Core.Tests
+namespace Chip8Emulator.Tests
 {
     [TestFixture]
     public class TestCpu

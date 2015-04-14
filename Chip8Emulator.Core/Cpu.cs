@@ -9,7 +9,6 @@ namespace Chip8Emulator.Core
         private readonly IRegisterBank _registerBank;
         private readonly IRandomService _randomService;
         private readonly IDisplay _display;
-        private int _operationCount;
         
         public Cpu(IMemory memory, IRegisterBank registerBank, IRandomService randomService, IDisplay display)
         {

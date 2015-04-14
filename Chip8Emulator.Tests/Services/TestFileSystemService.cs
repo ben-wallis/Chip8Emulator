@@ -1,8 +1,7 @@
 ﻿using Chip8Emulator.Core.Services;
-using Chip8Emulator.Core.Services;
 using NUnit.Framework;
 
-namespace Chip8Emulator.Core.Core.Tests.Services
+namespace Chip8Emulator.Tests.Services
 {
     [TestFixture]
     public class TestFileSystemService
