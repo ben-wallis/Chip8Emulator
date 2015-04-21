@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.Core.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.UI", "Chip8Emulator.UI\Chip8Emulator.UI.csproj", "{FF9A2FA9-3431-4619-8F43-B073F79C01A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chip8Emulator.UI.Tests", "Chip8Emulator.UI.Tests\Chip8Emulator.UI.Tests.csproj", "{57B87815-9F30-4D81-BF09-76EF4D1BBA5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FF9A2FA9-3431-4619-8F43-B073F79C01A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF9A2FA9-3431-4619-8F43-B073F79C01A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF9A2FA9-3431-4619-8F43-B073F79C01A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B87815-9F30-4D81-BF09-76EF4D1BBA5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B87815-9F30-4D81-BF09-76EF4D1BBA5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B87815-9F30-4D81-BF09-76EF4D1BBA5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B87815-9F30-4D81-BF09-76EF4D1BBA5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

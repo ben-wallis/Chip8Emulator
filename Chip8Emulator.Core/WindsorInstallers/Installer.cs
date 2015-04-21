@@ -12,7 +12,7 @@ namespace Chip8Emulator.Core.WindsorInstallers
                 Component
                     .For<IEmulatorShell>()
                     .ImplementedBy<EmulatorShell>()
-                    .LifestyleTransient()
+                    .LifestyleSingleton()
                 );
 
             container.Register(

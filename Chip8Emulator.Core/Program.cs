@@ -15,7 +15,7 @@ namespace Chip8Emulator.Core
                 );
 
             var emulatorShell = container.Resolve<IEmulatorShell>();
-            emulatorShell.RunEmulator();
+            emulatorShell.StartEmulation();
 
             Console.ReadLine();
         }

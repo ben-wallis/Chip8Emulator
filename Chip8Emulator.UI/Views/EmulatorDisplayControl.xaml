@@ -3,9 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:Chip8Emulator.UI.ViewModels"
+             xmlns:converters="clr-namespace:Chip8Emulator.UI.Converters"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:EmulatorDisplayControlViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:ArrayToListConverter x:Key="ArrayToListConverter" />
+        <converters:BooleanToColourConverter x:Key="BooleanToColourConverter" />
+    </UserControl.Resources>
     <Grid>
-            
+            <ItemsControl ItemsSource="{Binding DisplayPixels, Converter={StaticResource ArrayToListConverter}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="10" Height="10" Background="{Binding Converter={StaticResource BooleanToColourConverter}}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
     </Grid>
 </UserControl>
