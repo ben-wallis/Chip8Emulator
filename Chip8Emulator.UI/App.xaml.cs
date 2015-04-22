@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using Chip8Emulator.Core;
 using Chip8Emulator.UI.Views;
 
 namespace Chip8Emulator.UI

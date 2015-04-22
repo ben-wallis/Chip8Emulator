@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Chip8Emulator.Core;
 using Chip8Emulator.Core.Services;
 using Moq;
 using NUnit.Framework;

@@ -1,5 +1,4 @@
-﻿using Chip8Emulator.Core;
-using Chip8Emulator.Core.Services;
+﻿using Chip8Emulator.Core.Services;
 using Moq;
 using NUnit.Framework;
 
@@ -50,7 +49,7 @@ namespace Chip8Emulator.Core.Tests
             var result = fileHandler.LoadFileIntoMemory(TestFilePath);
 
             // Assert
-            Assert.AreEqual((int) 5, (int) result);
+            Assert.AreEqual(5, result);
         }
     }
 }

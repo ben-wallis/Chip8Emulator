@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Chip8Emulator.Core
 {
@@ -16,6 +15,8 @@ namespace Chip8Emulator.Core
         public event EventHandler EmulationStarted;
         public event EventHandler EmulationStopped;
         public event EventHandler DrawRequired;
+
+        public EventHandler<byte> KeyPressed;
 
         internal bool RunEmulation;
 
@@ -64,7 +65,7 @@ namespace Chip8Emulator.Core
         public void StartEmulation()
         {
             _registerBank.Initialise();
-            _fileHandler.LoadFileIntoMemory("c:\\chip8\\HIDDEN");
+            _fileHandler.LoadFileIntoMemory("c:\\chip8\\VBRIX");
             RunEmulation = true;
             Debug.WriteLine("Starting Emulation");
             if (EmulationStarted != null) EmulationStarted.Invoke(null, null);
@@ -79,11 +80,22 @@ namespace Chip8Emulator.Core
             //var emulationThread = new Thread(RunEmulator);
             //emulationThread.Start();
 
-            var emulationThread = new Thread(() => SafeExecute(RunEmulator, EmulationExceptionHandler));
+            var emulationThread = new Thread(() => SafeExecute(RunEmulator));
             emulationThread.Start();
         }
 
-        private void SafeExecute(Action actionToExecute, Action<Exception> handler)
+        public void OnKeyDown(byte key)
+        {
+            _registerBank.Key = key;
+            _registerBank.KeyPressed = true;
+        }
+
+        public void OnKeyUp(byte key)
+        {
+            _registerBank.KeyPressed = false;
+        }
+
+        private void SafeExecute(Action actionToExecute)
         {
             try
             {

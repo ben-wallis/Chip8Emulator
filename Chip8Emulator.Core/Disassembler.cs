@@ -93,7 +93,7 @@ namespace Chip8Emulator.Core
                             Console.WriteLine("SUBB      V{0:X}, V{1:x}", opCodeSecondNibble, opCodeThirdNibble);
                             break;
                         case 0x0e: // 8XYE Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift
-                            Console.WriteLine("SHL       V{0:X}", opCodeSecondNibble, opCodeThirdNibble);
+                            Console.WriteLine("SHL       V{0:X}", opCodeSecondNibble);
                             break;
                         default:
                             Console.WriteLine("8XY{0:X} not implemented", opCodeLastNibble);

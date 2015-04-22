@@ -1,5 +1,4 @@
-﻿using Chip8Emulator.Core;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Chip8Emulator.Core.Tests
 {
@@ -16,8 +15,8 @@ namespace Chip8Emulator.Core.Tests
             var display = new Display();
 
             // Assert
-            Assert.AreEqual((int) 64, (int) display.Pixels.GetLength(0));
-            Assert.AreEqual((int) 32, (int) display.Pixels.GetLength(1));
+            Assert.AreEqual(64, display.Pixels.GetLength(0));
+            Assert.AreEqual(32, display.Pixels.GetLength(1));
         }
 
         [Test]
