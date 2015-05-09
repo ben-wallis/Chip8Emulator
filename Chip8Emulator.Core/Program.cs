@@ -15,7 +15,7 @@ namespace Chip8Emulator.Core
                 );
 
             var emulatorShell = container.Resolve<IEmulatorShell>();
-            emulatorShell.StartEmulation();
+            emulatorShell.StartEmulation("c:\\chip8\\fishie.chip8");
 
             Console.ReadLine();
         }

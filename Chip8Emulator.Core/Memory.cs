@@ -24,6 +24,7 @@
 
         public void LoadProgram(byte[] program)
         {
+            _memoryBuffer = new byte[MemorySize];
             program.CopyTo(_memoryBuffer, ProgramStart);
         }
 

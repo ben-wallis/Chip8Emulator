@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Diagnostics;
 using System.Threading;
 
@@ -18,7 +19,9 @@ namespace Chip8Emulator.Core
 
         public EventHandler<byte> KeyPressed;
 
-        internal bool RunEmulation;
+        internal bool EmulationRunning;
+
+        private long _cycleCount;
 
         public EmulatorShell(IDisassembler disassembler, ICpu cpu, IFileHandler fileHandler, IDisplay display, IRegisterBank registerBank)
         {
@@ -44,44 +47,127 @@ namespace Chip8Emulator.Core
             _disassembler.DisassembleFile("c:\\chip8\\Dragon2");
         }
 
+        public void StartEmulation(string romFilePath)
+        {
+            _registerBank.Initialise();
+            _display.Initialise();
+
+            _fileHandler.LoadFileIntoMemory(romFilePath);
+            
+            EmulationRunning = true;
+            
+            RunEmulationThread();
+            RunDecrementTimersThread();
+            RunUpdateDisplayThread();
+            RunBenchmarkThread();
+
+            if (EmulationStarted != null) EmulationStarted.Invoke(null, null);
+        }
+
+        public virtual void RunEmulationThread()
+        {
+            var emulationThread = new Thread(() => SafeExecute(RunEmulator));
+            emulationThread.Start();
+        }
+
         public virtual void RunEmulator()
         {
-            while (RunEmulation)
+            Thread.CurrentThread.Name = "Run Emulator";
+            Debug.WriteLine("Run Emulator Thread Started");
+
+            _cycleCount = 0;
+            while (EmulationRunning)
             {
                 RunEmulationCycle();
+                _cycleCount++;
+                Thread.Sleep(10);
             }
-            Console.WriteLine("Emulation Complete");
+
+            Console.WriteLine("Run Emulator Thread Exited");
         }
 
         protected void RunEmulationCycle()
         {
             _cpu.EmulateOp();
-            if (_cpu.DrawRequired)
+        }
+        
+        public void RunBenchmarkThread()
+        {
+            var benchmarkThread = new Thread(BenchmarkEmulation);
+            benchmarkThread.Start();
+        }
+
+        public void BenchmarkEmulation()
+        {
+            Thread.CurrentThread.Name = "Benchmark Emulation";
+            Console.WriteLine("Benchmark Emulation Thread Started");
+
+            var lastCycleCount = _cycleCount;
+            while (EmulationRunning)
+            {
+                var currentCycleCount = _cycleCount;
+                var cyclesPerSecond = currentCycleCount - lastCycleCount;
+                Console.WriteLine("Cycles per Second: {0}", cyclesPerSecond);
+                lastCycleCount = currentCycleCount;
+                Thread.Sleep(1000);
+            }
+
+            Console.WriteLine("Benchmark Emulation Thread Exited");
+        }
+
+        public void RunUpdateDisplayThread()
+        {
+            var updateDisplayThread = new Thread(UpdateDisplay);
+            updateDisplayThread.Start();
+        }
+
+        public void UpdateDisplay()
+        {
+            try
+            {
+                Thread.CurrentThread.Name = "Update Display";
+            }
+            catch
+            {
+            }
+
+            Console.WriteLine("Update Display Thread Started");
+            
+            while (EmulationRunning)
             {
                 if (DrawRequired != null) DrawRequired.Invoke(null, null);
+                Thread.Sleep(16);
             }
+            
+            Console.WriteLine("Update Display Thread Exited");
         }
 
-        public void StartEmulation()
+        public void RunDecrementTimersThread()
         {
-            _registerBank.Initialise();
-            _fileHandler.LoadFileIntoMemory("c:\\chip8\\VBRIX");
-            RunEmulation = true;
-            Debug.WriteLine("Starting Emulation");
-            if (EmulationStarted != null) EmulationStarted.Invoke(null, null);
-           RunEmulationThread();
+            var decrementTimersThread = new Thread(DecrementTimers);
+            decrementTimersThread.Start();
         }
 
-        public virtual void RunEmulationThread()
+        public void DecrementTimers()
         {
-            //Task emulationTask = new Task(RunEmulator);
-            //emulationTask.ContinueWith(EmulationExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
-            //emulationTask.Start();
-            //var emulationThread = new Thread(RunEmulator);
-            //emulationThread.Start();
+            Thread.CurrentThread.Name = "Decrement Timers";
+            Console.WriteLine("Decrement Timers Thread Started");
 
-            var emulationThread = new Thread(() => SafeExecute(RunEmulator));
-            emulationThread.Start();
+            while (EmulationRunning)
+            {
+                if (_registerBank.Delay > 0)
+                {
+                    _registerBank.Delay--;
+                }
+
+                if (_registerBank.Sound > 0)
+                {
+                    _registerBank.Sound--;
+                }
+                Thread.Sleep(16); // 60hz..ish
+            }
+
+            Console.WriteLine("Decrement Timers Thread Exited");
         }
 
         public void OnKeyDown(byte key)
@@ -92,7 +178,7 @@ namespace Chip8Emulator.Core
 
         public void OnKeyUp(byte key)
         {
-            _registerBank.KeyPressed = false;
+           _registerBank.KeyPressed = false;
         }
 
         private void SafeExecute(Action actionToExecute)
@@ -115,7 +201,7 @@ namespace Chip8Emulator.Core
 
         public void StopEmulation()
         {
-            RunEmulation = false;
+            EmulationRunning = false;
         }
     }
 }

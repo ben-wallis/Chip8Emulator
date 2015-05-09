@@ -17,16 +17,17 @@ namespace Chip8Emulator.UI.Tests.ViewModels
         }
         
         [Test]
-        public void StartEmulationCommand_CallsEmulatorShellStartEmulation()
+        public void StartEmulationCommand_CallsEmulatorShellStartEmulationWithRomFilePath()
         {
             // Arrange
-            _testUtility.MockEmulatorShell.Setup(s => s.StartEmulation()).Verifiable();
+            _testUtility.TestMainWindowViewModel.RomFilePath = "C:\\Testfile.txt";
+            _testUtility.MockEmulatorShell.Setup(s => s.StartEmulation(_testUtility.TestMainWindowViewModel.RomFilePath)).Verifiable();
 
             // Act
             _testUtility.TestMainWindowViewModel.StartEmulationCommand.Execute(null);
             
             // Assert
-            _testUtility.MockEmulatorShell.Verify(s => s.StartEmulation());
+            _testUtility.MockEmulatorShell.Verify(s => s.StartEmulation(_testUtility.TestMainWindowViewModel.RomFilePath));
         }
 
         [Test]
@@ -47,13 +48,13 @@ namespace Chip8Emulator.UI.Tests.ViewModels
         {
             // Arrange
             const string TestInputKey = "Numpad4";
-            _testUtility.MockEmulatorDisplayControlViewModel.Setup(v => v.OnKeyDown(TestInputKey)).Verifiable();
+            _testUtility.MockEmulatorDisplayViewModel.Setup(v => v.OnKeyDown(TestInputKey)).Verifiable();
 
             // Act
             _testUtility.TestMainWindowViewModel.KeyDownCommand.Execute(TestInputKey);
 
             // Assert
-            _testUtility.MockEmulatorDisplayControlViewModel.Verify(v => v.OnKeyDown(TestInputKey));
+            _testUtility.MockEmulatorDisplayViewModel.Verify(v => v.OnKeyDown(TestInputKey));
         }
 
         [Test]
@@ -61,13 +62,13 @@ namespace Chip8Emulator.UI.Tests.ViewModels
         {
             // Arrange
             const string TestInputKey = "Numpad4";
-            _testUtility.MockEmulatorDisplayControlViewModel.Setup(v => v.OnKeyUp(TestInputKey)).Verifiable();
+            _testUtility.MockEmulatorDisplayViewModel.Setup(v => v.OnKeyUp(TestInputKey)).Verifiable();
 
             // Act
             _testUtility.TestMainWindowViewModel.KeyUpCommand.Execute(TestInputKey);
 
             // Assert
-            _testUtility.MockEmulatorDisplayControlViewModel.Verify(v => v.OnKeyUp(TestInputKey));
+            _testUtility.MockEmulatorDisplayViewModel.Verify(v => v.OnKeyUp(TestInputKey));
         }
 
         [Test]
@@ -75,14 +76,14 @@ namespace Chip8Emulator.UI.Tests.ViewModels
         {
             // Arrange
             const string TestInputKey = "Numpad4";
-            _testUtility.MockEmulatorDisplayControlViewModel.Setup(v => v.OnKeyDown(TestInputKey)).Verifiable();
+            _testUtility.MockEmulatorDisplayViewModel.Setup(v => v.OnKeyDown(TestInputKey)).Verifiable();
 
             // Act
             _testUtility.TestMainWindowViewModel.KeyDownCommand.Execute(TestInputKey);
             _testUtility.TestMainWindowViewModel.KeyDownCommand.Execute(TestInputKey);
 
             // Assert
-            _testUtility.MockEmulatorDisplayControlViewModel.Verify(v => v.OnKeyDown(TestInputKey), Times.Once);
+            _testUtility.MockEmulatorDisplayViewModel.Verify(v => v.OnKeyDown(TestInputKey), Times.Once);
         }
 
         [Test]
@@ -90,7 +91,7 @@ namespace Chip8Emulator.UI.Tests.ViewModels
         {
             // Arrange
             const string TestInputKey = "Numpad4";
-            _testUtility.MockEmulatorDisplayControlViewModel.Setup(v => v.OnKeyDown(TestInputKey)).Verifiable();
+            _testUtility.MockEmulatorDisplayViewModel.Setup(v => v.OnKeyDown(TestInputKey)).Verifiable();
 
             // Act
             _testUtility.TestMainWindowViewModel.KeyDownCommand.Execute(TestInputKey);
@@ -98,7 +99,7 @@ namespace Chip8Emulator.UI.Tests.ViewModels
             _testUtility.TestMainWindowViewModel.KeyDownCommand.Execute(TestInputKey);
 
             // Assert
-            _testUtility.MockEmulatorDisplayControlViewModel.Verify(v => v.OnKeyDown(TestInputKey), Times.Exactly(2));
+            _testUtility.MockEmulatorDisplayViewModel.Verify(v => v.OnKeyDown(TestInputKey), Times.Exactly(2));
         }
 
         private class MainWindowViewModelTestUtility
@@ -107,14 +108,17 @@ namespace Chip8Emulator.UI.Tests.ViewModels
             {
                 // Mock setups
                 MockEmulatorShell = new Mock<IEmulatorShell>();
-                MockEmulatorDisplayControlViewModel = new Mock<IEmulatorDisplayControlViewModel>();
-
+                MockEmulatorDisplayViewModel = new Mock<IEmulatorDisplayViewModel>();
+                
+                TestRomFilePath = "C:\\testfile.txt";
                 //Class under test instantiation
-                TestMainWindowViewModel = new MainWindowViewModel(MockEmulatorShell.Object, MockEmulatorDisplayControlViewModel.Object);
+                TestMainWindowViewModel = new MainWindowViewModel(MockEmulatorShell.Object, MockEmulatorDisplayViewModel.Object, MockEmulatorManagementViewModel.Object);
             }
             public Mock<IEmulatorShell> MockEmulatorShell { get; private set; }
-            public Mock<IEmulatorDisplayControlViewModel> MockEmulatorDisplayControlViewModel { get; private set; }
+            public Mock<IEmulatorDisplayViewModel> MockEmulatorDisplayViewModel { get; private set; }
+            public Mock<IEmulatorManagementViewModel> MockEmulatorManagementViewModel { get; private set; }
             public MainWindowViewModel TestMainWindowViewModel { get; private set; }
+            public string TestRomFilePath { get; private set; }
         }
     }
 }

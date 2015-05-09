@@ -94,11 +94,11 @@ namespace Chip8Emulator.UI.Tests.ViewModels
                 MockEmulatorShell = new Mock<IEmulatorShell>();
 
                 //Class under test instantiation
-                TestViewModel = new EmulatorDisplayControlViewModel(MockEmulatorShell.Object);
+                TestViewModel = new EmulatorDisplayViewModel(MockEmulatorShell.Object);
             }
             public Mock<IEmulatorShell> MockEmulatorShell { get; private set; }
 
-            public EmulatorDisplayControlViewModel TestViewModel { get; private set; }
+            public EmulatorDisplayViewModel TestViewModel { get; private set; }
         }
     }
 }

@@ -6,11 +6,11 @@ using Chip8Emulator.UI.Annotations;
 
 namespace Chip8Emulator.UI.ViewModels
 {
-    internal class EmulatorDisplayControlViewModel : INotifyPropertyChanged, IEmulatorDisplayControlViewModel
+    internal class EmulatorDisplayViewModel : INotifyPropertyChanged, IEmulatorDisplayViewModel
     {
         private readonly IEmulatorShell _emulatorShell;
 
-        public EmulatorDisplayControlViewModel(IEmulatorShell emulatorShell)
+        public EmulatorDisplayViewModel(IEmulatorShell emulatorShell)
         {
             _emulatorShell = emulatorShell;
             _emulatorShell.DrawRequired += OnDrawRequired;

@@ -12,7 +12,7 @@ namespace Chip8Emulator.Core
         event EventHandler DrawRequired;
 
         void DisassembleFile();
-        void StartEmulation();
+        void StartEmulation(string romFilePath);
         void StopEmulation();
         void OnKeyDown(byte key);
         void OnKeyUp(byte key);

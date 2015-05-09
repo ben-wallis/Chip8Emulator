@@ -2,7 +2,7 @@
 
 namespace Chip8Emulator.UI.ViewModels
 {
-    internal interface IEmulatorDisplayControlViewModel
+    internal interface IEmulatorDisplayViewModel
     {
         void OnKeyDown(string key);
         void OnKeyUp(string key);

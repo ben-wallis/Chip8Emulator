@@ -6,7 +6,7 @@
              xmlns:viewmodels="clr-namespace:Chip8Emulator.UI.ViewModels"
              xmlns:converters="clr-namespace:Chip8Emulator.UI.Converters"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type=viewmodels:EmulatorDisplayControlViewModel}"
+             d:DataContext="{d:DesignInstance Type=viewmodels:EmulatorDisplayViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:ArrayToListConverter x:Key="ArrayToListConverter" />
