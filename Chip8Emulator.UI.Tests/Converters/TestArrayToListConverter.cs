@@ -16,7 +16,7 @@ namespace Chip8Emulator.UI.Tests.Converters
             const int TestArrayHeight = 10;
             var testArray = new bool[TestArrayWidth, TestArrayHeight];
 
-            var converter = new ArrayToListConverter();
+            var converter = new BoolArrayToListConverter();
             
             // Act
             var result = (List<List<bool>>)converter.Convert(testArray, null, null, null);

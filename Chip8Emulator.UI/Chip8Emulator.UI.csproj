@@ -72,21 +72,43 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\ArrayToListConverter.cs" />
+    <Compile Include="Converters\ByteArrayToListConverter.cs" />
+    <Compile Include="Converters\BoolArrayToListConverter.cs" />
     <Compile Include="Converters\BooleanToColourConverter.cs" />
     <Compile Include="Extensions\Win32WindowExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\FolderBrowserDialogService.cs" />
+    <Compile Include="Services\IFolderBrowserDialogService.cs" />
     <Compile Include="ViewModels\EmulatorDisplayViewModel.cs" />
     <Compile Include="ViewModels\EmulatorManagementViewModel.cs" />
     <Compile Include="ViewModels\EmulatorRegistersViewModel.cs" />
     <Compile Include="ViewModels\IEmulatorDisplayViewModel.cs" />
     <Compile Include="ViewModels\IEmulatorManagementViewModel.cs" />
+    <Compile Include="ViewModels\IEmulatorRegistersViewModel.cs" />
     <Compile Include="ViewModels\IMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\EmulatorDisplayControl.xaml.cs">
@@ -100,6 +122,7 @@
       <DependentUpon>EmulatorManagementControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindsorInstallers\ViewModelsInstaller.cs" />
+    <Compile Include="WindsorInstallers\ServicesInstaller.cs" />
     <Compile Include="WindsorInstallers\ViewsInstaller.cs" />
     <Page Include="Views\EmulatorRegistersControl.xaml">
       <SubType>Designer</SubType>

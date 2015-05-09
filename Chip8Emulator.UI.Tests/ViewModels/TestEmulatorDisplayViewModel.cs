@@ -6,14 +6,14 @@ using NUnit.Framework;
 namespace Chip8Emulator.UI.Tests.ViewModels
 {
     [TestFixture]
-    public class TestEmulatorDisplayControlViewModel
+    public class TestEmulatorDisplayViewModel
     {
-        private EmulatorDisplayControlViewModelTestUtility _testUtility;
+        private EmulatorDisplayViewModelTestUtility _testUtility;
 
         [SetUp]
         public void TestSetup()
         {
-            _testUtility = new EmulatorDisplayControlViewModelTestUtility();
+            _testUtility = new EmulatorDisplayViewModelTestUtility();
         }
 
         [Test]
@@ -86,9 +86,9 @@ namespace Chip8Emulator.UI.Tests.ViewModels
             _testUtility.MockEmulatorShell.Verify(s => s.OnKeyUp(expectedValue));
         }
 
-        private class EmulatorDisplayControlViewModelTestUtility
+        private class EmulatorDisplayViewModelTestUtility
         {
-            public EmulatorDisplayControlViewModelTestUtility()
+            public EmulatorDisplayViewModelTestUtility()
             {
                 // Mock setups
                 MockEmulatorShell = new Mock<IEmulatorShell>();

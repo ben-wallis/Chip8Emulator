@@ -1,36 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Input;
-using Chip8Emulator.Core;
 using GalaSoft.MvvmLight.CommandWpf;
 
 namespace Chip8Emulator.UI.ViewModels
 {
     internal class MainWindowViewModel : IMainWindowViewModel
     {
-        private readonly IEmulatorShell _emulatorShell;
         private readonly IEmulatorDisplayViewModel _emulatorDisplayViewModel;
         private readonly IEmulatorManagementViewModel _emulatorManagementViewModel;
+        private readonly IEmulatorRegistersViewModel _emulatorRegistersViewModel;
+
         private readonly Dictionary<string, bool> _keyRepeats = new Dictionary<string, bool>();
 
-        public MainWindowViewModel(IEmulatorShell emulatorShell, IEmulatorDisplayViewModel emulatorDisplayViewModel, IEmulatorManagementViewModel emulatorManagementViewModel)
+        public MainWindowViewModel(IEmulatorDisplayViewModel emulatorDisplayViewModel, IEmulatorManagementViewModel emulatorManagementViewModel, IEmulatorRegistersViewModel emulatorRegistersViewModel)
         {
-            _emulatorShell = emulatorShell;
             _emulatorDisplayViewModel = emulatorDisplayViewModel;
             _emulatorManagementViewModel = emulatorManagementViewModel;
-            StartEmulationCommand = new RelayCommand(StartEmulation);
-            StopEmulationCommand = new RelayCommand(StopEmulation);
+            _emulatorRegistersViewModel = emulatorRegistersViewModel;
             KeyDownCommand = new RelayCommand<string>(OnKeyDown);
             KeyUpCommand = new RelayCommand<string>(OnKeyUp);
         }
 
-        public ICommand StartEmulationCommand { get; private set; }
-        public ICommand StopEmulationCommand { get; private set; }
-        
         public ICommand KeyDownCommand { get; private set; }
         public ICommand KeyUpCommand { get; private set; }
-
-        public string RomFilePath { get; set; }
 
         private void OnKeyDown(string key)
         {
@@ -65,15 +58,12 @@ namespace Chip8Emulator.UI.ViewModels
             }
         }
 
-        private void StartEmulation()
+        public IEmulatorRegistersViewModel EmulatorRegistersViewModel
         {
-            _emulatorShell.StartEmulation(RomFilePath);
+            get
+            {
+                return _emulatorRegistersViewModel;
+            }
         }
-
-        private void StopEmulation()
-        {
-            _emulatorShell.StopEmulation();
-        }
-
     }
 }

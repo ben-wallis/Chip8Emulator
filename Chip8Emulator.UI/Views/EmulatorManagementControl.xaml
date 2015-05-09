@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:viewmodels="clr-namespace:Chip8Emulator.UI.ViewModels"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=viewmodels:EmulatorManagementViewModel}"
@@ -10,7 +11,17 @@
     <StackPanel>
         <Button Command="{Binding SelectRomDirectoryCommand}" CommandParameter="{Binding ElementName=EmulatorManagementUserControl}">Select ROM Folder</Button>
         
-            <TextBlock Text="{Binding RomDirectoryPath}" />
-            <ListView></ListView>
+        <TextBlock Text="{Binding RomDirectoryPath}" />
+        <TextBox Text="{Binding RomFilename}" />
+        <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding StartEmulationCommand}">Start Emulation</Button>
+            <Button Command="{Binding StopEmulationCommand}">Stop Emulation</Button>
+        </StackPanel>
+        <TextBlock>Cycle Delay:</TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <Slider Minimum="0" Maximum="1000" Value="{Binding CycleDelay}" Width="200" />
+            <xctk:ShortUpDown Minimum="0" Maximum="1000" Value="{Binding CycleDelay}" />
+        </StackPanel>
+        
     </StackPanel>
 </UserControl>

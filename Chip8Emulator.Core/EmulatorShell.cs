@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Diagnostics;
 using System.Threading;
 
@@ -15,9 +14,11 @@ namespace Chip8Emulator.Core
 
         public event EventHandler EmulationStarted;
         public event EventHandler EmulationStopped;
+        public event EventHandler CycleTick;
         public event EventHandler DrawRequired;
 
-        public EventHandler<byte> KeyPressed;
+        public ushort CycleDelay { get; set; }
+        public ushort CycleTickEventInterval { get; set; }
 
         internal bool EmulationRunning;
 
@@ -30,16 +31,13 @@ namespace Chip8Emulator.Core
             _fileHandler = fileHandler;
             _display = display;
             _registerBank = registerBank;
+            CycleDelay = 10;
+            CycleTickEventInterval = 1;
         }
 
         public bool[,] DisplayPixels
         {
             get { return _display.Pixels; }
-        }
-
-        public IRegisterBank RegisterBank
-        {
-            get { return _registerBank; }
         }
 
         public void DisassembleFile()
@@ -51,9 +49,15 @@ namespace Chip8Emulator.Core
         {
             _registerBank.Initialise();
             _display.Initialise();
+            try
+            {
+                _fileHandler.LoadFileIntoMemory(romFilePath);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Unable to load ROM");
+            }
 
-            _fileHandler.LoadFileIntoMemory(romFilePath);
-            
             EmulationRunning = true;
             
             RunEmulationThread();
@@ -76,12 +80,25 @@ namespace Chip8Emulator.Core
             Debug.WriteLine("Run Emulator Thread Started");
 
             _cycleCount = 0;
+            var cyclesSinceEvent = 0;
             while (EmulationRunning)
             {
                 RunEmulationCycle();
                 _cycleCount++;
-                Thread.Sleep(10);
+
+                if (cyclesSinceEvent++ == CycleTickEventInterval)
+                {
+                    cyclesSinceEvent = 0;
+                    if (CycleTick != null) CycleTick.Invoke(null, null);
+                }
+
+                if (CycleDelay > 0)
+                {
+                    Thread.Sleep(CycleDelay);
+                }
             }
+
+            if (EmulationStopped != null) EmulationStopped.Invoke(null, null);
 
             Console.WriteLine("Run Emulator Thread Exited");
         }
@@ -90,14 +107,14 @@ namespace Chip8Emulator.Core
         {
             _cpu.EmulateOp();
         }
-        
-        public void RunBenchmarkThread()
+
+        private void RunBenchmarkThread()
         {
             var benchmarkThread = new Thread(BenchmarkEmulation);
             benchmarkThread.Start();
         }
 
-        public void BenchmarkEmulation()
+        private void BenchmarkEmulation()
         {
             Thread.CurrentThread.Name = "Benchmark Emulation";
             Console.WriteLine("Benchmark Emulation Thread Started");
@@ -115,7 +132,7 @@ namespace Chip8Emulator.Core
             Console.WriteLine("Benchmark Emulation Thread Exited");
         }
 
-        public void RunUpdateDisplayThread()
+        private void RunUpdateDisplayThread()
         {
             var updateDisplayThread = new Thread(UpdateDisplay);
             updateDisplayThread.Start();
@@ -127,9 +144,7 @@ namespace Chip8Emulator.Core
             {
                 Thread.CurrentThread.Name = "Update Display";
             }
-            catch
-            {
-            }
+            catch {}
 
             Console.WriteLine("Update Display Thread Started");
             
@@ -142,7 +157,7 @@ namespace Chip8Emulator.Core
             Console.WriteLine("Update Display Thread Exited");
         }
 
-        public void RunDecrementTimersThread()
+        private void RunDecrementTimersThread()
         {
             var decrementTimersThread = new Thread(DecrementTimers);
             decrementTimersThread.Start();
@@ -192,7 +207,6 @@ namespace Chip8Emulator.Core
                 EmulationExceptionHandler(ex);
             }
         }
-
 
         public void EmulationExceptionHandler(Exception exception)
         {

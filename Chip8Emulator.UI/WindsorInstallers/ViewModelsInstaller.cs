@@ -29,6 +29,13 @@ namespace Chip8Emulator.UI.WindsorInstallers
                     .ImplementedBy<EmulatorManagementViewModel>()
                     .LifestyleTransient()
                 );
+
+            container.Register(
+                Component
+                    .For<IEmulatorRegistersViewModel>()
+                    .ImplementedBy<EmulatorRegistersViewModel>()
+                    .LifestyleTransient()
+                );
         }
     }
 }

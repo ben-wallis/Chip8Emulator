@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace Chip8Emulator.UI.Converters
 {
-    class ArrayToListConverter : IValueConverter
+    class BoolArrayToListConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
